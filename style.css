@@ -21,7 +21,7 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
-/* شاشة إدخال الاسم */
+/* شاشة إدخال الاسم وكود الأمان */
 .prompt-container {
     background: #fff;
     padding: 30px;
@@ -200,6 +200,30 @@ body.dark-mode #chat-box::-webkit-scrollbar-thumb {
 body.dark-mode #chat-box p.received {
     background: #444;
     color: #e0e0e0;
+}
+
+#chat-box p .actions {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+}
+
+#chat-box p.sent:hover .actions {
+    display: inline;
+}
+
+#chat-box p .actions button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+#chat-box p .actions button:hover {
+    color: #ffdd57;
 }
 
 /* منطقة الإدخال */
