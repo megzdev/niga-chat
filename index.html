@@ -18,6 +18,7 @@
 
         <div id="signup-form" style="display: none;">
             <h2>إنشاء حساب</h2>
+            <input type="text" id="signup-username" placeholder="اسم المستخدم">
             <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
             <input type="password" id="signup-password" placeholder="كلمة السر">
             <button onclick="signUp()">تسجيل</button>
@@ -29,13 +30,30 @@
         <div class="header">
             <h1>شات أصحابي</h1>
             <button id="theme-toggle">🌙</button>
+            <button onclick="showSettings()">الإعدادات</button>
             <button onclick="signOut()">تسجيل الخروج</button>
         </div>
-        <div id="chat-box"></div>
+        <div class="main-content">
+            <div id="chat-box"></div>
+            <div id="users-box">
+                <h3>المستخدمون</h3>
+                <div id="users-list"></div>
+            </div>
+        </div>
         <div class="input-area">
             <input type="text" id="message-input" placeholder="اكتب رسالتك هنا...">
             <button onclick="sendMessage()">إرسال</button>
         </div>
+    </div>
+
+    <div id="settings-container" class="prompt-container" style="display: none;">
+        <h2>الإعدادات</h2>
+        <input type="text" id="settings-username" placeholder="اسم المستخدم الجديد">
+        <input type="email" id="settings-email" placeholder="البريد الإلكتروني الجديد">
+        <input type="password" id="settings-password" placeholder="كلمة السر الجديدة">
+        <input type="text" id="settings-avatar" placeholder="رابط الصورة الجديدة">
+        <button onclick="updateSettings()">حفظ التغييرات</button>
+        <button onclick="hideSettings()">إغلاق</button>
     </div>
 
     <!-- روابط Firebase v8 -->
