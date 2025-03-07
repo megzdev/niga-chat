@@ -2,14 +2,21 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>شات أصحابي</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="chat-box"></div>
-    <input type="text" id="message-input" placeholder="اكتب رسالتك">
-    <button onclick="sendMessage()">إرسال</button>
+    <div class="chat-container">
+        <h1>شات أصحابي</h1>
+        <div id="chat-box"></div>
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="اكتب رسالتك هنا...">
+            <button onclick="sendMessage()">إرسال</button>
+        </div>
+    </div>
 
+    <!-- روابط Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <script src="script.js"></script>
