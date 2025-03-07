@@ -18,7 +18,18 @@ const messagesRef = database.ref('messages');
 const usersRef = database.ref('users');
 
 let currentUser = null;
-const defaultAvatar = 'https://via.placeholder.com/40'; // صورة افتراضية
+const defaultAvatar = 'https://cdn.discordapp.com/attachments/1249366016476319749/1347544588436377690/image.png?ex=67cc3632&is=67cae4b2&hm=7f4492cf980da571a35d0f2ae918af53cfe35189cd11ecee21c67027903a5575&';
+
+// التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    currentUser = user;
+    showChat();
+  } else {
+    document.getElementById('auth-container').style.display = 'block';
+    document.getElementById('chat-container').style.display = 'none';
+  }
+});
 
 // تسجيل الدخول
 function signIn() {
@@ -97,7 +108,7 @@ function showSettings() {
   usersRef.child(currentUser.uid).once('value', (snapshot) => {
     const userData = snapshot.val() || {};
     document.getElementById('settings-username').value = userData.username || '';
-    document.getElementById('settings-email').value = currentUser.email || ''; // نجيب الإيميل من currentUser
+    document.getElementById('settings-email').value = currentUser.email || '';
     document.getElementById('settings-avatar').value = userData.avatar || defaultAvatar;
   });
 }
@@ -114,7 +125,9 @@ function updateSettings() {
   const newAvatar = document.getElementById('settings-avatar').value || defaultAvatar;
 
   if (newUsername) {
-    usersRef.child(currentUser.uid).update({ username: newUsername });
+    usersRef.child(currentUser.uid).update({ username: newUsername }).then(() => {
+      updateOldMessages(currentUser.uid, newUsername); // تحديث الرسايل القديمة
+    });
   }
   if (newAvatar) {
     usersRef.child(currentUser.uid).update({ avatar: newAvatar });
@@ -132,6 +145,23 @@ function updateSettings() {
   }
   alert('تم تحديث الإعدادات بنجاح!');
   hideSettings();
+}
+
+// تحديث الرسايل القديمة
+function updateOldMessages(userId, newUsername) {
+  messagesRef.once('value', (snapshot) => {
+    const messages = snapshot.val();
+    if (messages) {
+      Object.entries(messages).forEach(([id, msg]) => {
+        usersRef.child(userId).once('value', (userSnapshot) => {
+          const oldUsername = userSnapshot.val().username;
+          if (msg.sender === oldUsername) {
+            messagesRef.child(id).update({ sender: newUsername });
+          }
+        });
+      });
+    }
+  });
 }
 
 // دالة إرسال الرسالة
@@ -177,7 +207,7 @@ function deleteMessage(messageId) {
 function loadMessages() {
   messagesRef.limitToLast(50).on('value', (snapshot) => {
     const chatBox = document.getElementById('chat-box');
-    chatBox.innerHTML = ''; // نضمن إن الشات يظهر حتى لو مفيش رسايل
+    chatBox.innerHTML = '';
     if (!currentUser) return;
 
     usersRef.child(currentUser.uid).once('value', (userSnapshot) => {
@@ -217,7 +247,7 @@ function loadUsers() {
     const users = snapshot.val();
     if (users) {
       Object.values(users).forEach(user => {
-        if (user.username && user.avatar) { // نتحقق إن البيانات موجودة
+        if (user.username && user.avatar) {
           const div = document.createElement('div');
           div.classList.add('user-item');
           div.innerHTML = `<img src="${user.avatar}" alt="${user.username}"><span>${user.username}</span>`;
