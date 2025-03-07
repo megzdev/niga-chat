@@ -5,7 +5,6 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Light Mode (افتراضي) */
 body {
     background: linear-gradient(135deg, #e0e7ff 0%, #f0f2f5 100%);
     display: flex;
@@ -15,13 +14,12 @@ body {
     transition: background 0.5s, color 0.3s;
 }
 
-/* Dark Mode */
 body.dark-mode {
     background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
     color: #e0e0e0;
 }
 
-/* شاشة إدخال الاسم وكود الأمان */
+/* شاشة التسجيل */
 .prompt-container {
     background: #fff;
     padding: 30px;
@@ -88,6 +86,24 @@ body.dark-mode .prompt-container input {
     box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
 }
 
+.prompt-container p {
+    margin-top: 15px;
+    color: #666;
+}
+
+body.dark-mode .prompt-container p {
+    color: #ccc;
+}
+
+.prompt-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.prompt-container a:hover {
+    text-decoration: underline;
+}
+
 /* حاوية الشات */
 .chat-container {
     width: 100%;
@@ -106,7 +122,6 @@ body.dark-mode .chat-container {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* الهيدر */
 .header {
     display: flex;
     justify-content: space-between;
@@ -142,7 +157,20 @@ body.dark-mode h1 {
     transform: scale(1.2);
 }
 
-/* صندوق الرسايل */
+.header button:not(#theme-toggle) {
+    padding: 8px 15px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.header button:not(#theme-toggle):hover {
+    background: #c82333;
+}
+
 #chat-box {
     height: 450px;
     background: #f8fafc;
@@ -226,7 +254,6 @@ body.dark-mode #chat-box p.received {
     color: #ffdd57;
 }
 
-/* منطقة الإدخال */
 .input-area {
     display: flex;
     gap: 15px;
@@ -279,7 +306,6 @@ button:hover {
     box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
 }
 
-/* تأثيرات التحريك */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
