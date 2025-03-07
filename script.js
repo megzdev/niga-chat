@@ -52,6 +52,8 @@ function signUp() {
         avatar: defaultAvatar
       }).then(() => {
         showChat();
+      }).catch((error) => {
+        alert('خطأ في حفظ بيانات المستخدم: ' + error.message);
       });
     })
     .catch((error) => {
@@ -94,9 +96,11 @@ function showSettings() {
   document.getElementById('settings-container').style.display = 'block';
   usersRef.child(currentUser.uid).once('value', (snapshot) => {
     const userData = snapshot.val();
-    document.getElementById('settings-username').value = userData.username;
-    document.getElementById('settings-email').value = userData.email;
-    document.getElementById('settings-avatar').value = userData.avatar;
+    if (userData) {
+      document.getElementById('settings-username').value = userData.username || '';
+      document.getElementById('settings-email').value = userData.email || '';
+      document.getElementById('settings-avatar').value = userData.avatar || defaultAvatar;
+    }
   });
 }
 
@@ -134,13 +138,19 @@ function sendMessage() {
   if (messageText && currentUser) {
     usersRef.child(currentUser.uid).once('value', (snapshot) => {
       const userData = snapshot.val();
-      messagesRef.push({
-        text: messageText,
-        sender: userData.username,
-        timestamp: Date.now()
-      }).then(() => {
-        messageInput.value = '';
-      });
+      if (userData && userData.username) {
+        messagesRef.push({
+          text: messageText,
+          sender: userData.username,
+          timestamp: Date.now()
+        }).then(() => {
+          messageInput.value = '';
+        }).catch((error) => {
+          alert('خطأ في إرسال الرسالة: ' + error.message);
+        });
+      } else {
+        alert('خطأ: لم يتم العثور على اسم المستخدم!');
+      }
     });
   }
 }
@@ -164,11 +174,13 @@ function deleteMessage(messageId) {
 function loadMessages() {
   messagesRef.limitToLast(50).on('value', (snapshot) => {
     const chatBox = document.getElementById('chat-box');
-    chatBox.innerHTML = ''; // نضمن إن الشات يتحمل حتى لو مفيش رسايل
+    chatBox.innerHTML = ''; // نضمن إن الشات يظهر حتى لو مفيش رسايل
     if (!currentUser) return;
-    
+
     usersRef.child(currentUser.uid).once('value', (userSnapshot) => {
-      const currentUsername = userSnapshot.val().username;
+      const userData = userSnapshot.val();
+      if (!userData || !userData.username) return;
+      const currentUsername = userData.username;
       const messages = snapshot.val();
       if (messages) {
         Object.entries(messages).forEach(([id, msg]) => {
@@ -199,10 +211,12 @@ function loadUsers() {
     const users = snapshot.val();
     if (users) {
       Object.values(users).forEach(user => {
-        const div = document.createElement('div');
-        div.classList.add('user-item');
-        div.innerHTML = `<img src="${user.avatar}" alt="${user.username}"><span>${user.username}</span>`;
-        usersList.appendChild(div);
+        if (user.username && user.avatar) { // نتحقق إن البيانات موجودة
+          const div = document.createElement('div');
+          div.classList.add('user-item');
+          div.innerHTML = `<img src="${user.avatar}" alt="${user.username}"><span>${user.username}</span>`;
+          usersList.appendChild(div);
+        }
       });
     }
   });
