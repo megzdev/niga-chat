@@ -50,8 +50,9 @@ function signUp() {
         username: username,
         email: email,
         avatar: defaultAvatar
+      }).then(() => {
+        showChat();
       });
-      showChat();
     })
     .catch((error) => {
       alert('خطأ في إنشاء الحساب: ' + error.message);
@@ -137,8 +138,9 @@ function sendMessage() {
         text: messageText,
         sender: userData.username,
         timestamp: Date.now()
+      }).then(() => {
+        messageInput.value = '';
       });
-      messageInput.value = '';
     });
   }
 }
@@ -162,30 +164,30 @@ function deleteMessage(messageId) {
 function loadMessages() {
   messagesRef.limitToLast(50).on('value', (snapshot) => {
     const chatBox = document.getElementById('chat-box');
-    chatBox.innerHTML = '';
-    const messages = snapshot.val();
-    if (currentUser) {
-      usersRef.child(currentUser.uid).once('value', (userSnapshot) => {
-        const currentUsername = userSnapshot.val().username;
-        if (messages) {
-          Object.entries(messages).forEach(([id, msg]) => {
-            const p = document.createElement('p');
-            p.textContent = `${msg.sender}: ${msg.text}`;
-            if (msg.sender === currentUsername) {
-              p.classList.add('sent');
-              p.innerHTML += ` <span class="actions">
-                <button onclick="editMessage('${id}', '${msg.text}')">تعديل</button>
-                <button onclick="deleteMessage('${id}')">مسح</button>
-              </span>`;
-            } else {
-              p.classList.add('received');
-            }
-            chatBox.appendChild(p);
-          });
-          chatBox.scrollTop = chatBox.scrollHeight;
-        }
-      });
-    }
+    chatBox.innerHTML = ''; // نضمن إن الشات يتحمل حتى لو مفيش رسايل
+    if (!currentUser) return;
+    
+    usersRef.child(currentUser.uid).once('value', (userSnapshot) => {
+      const currentUsername = userSnapshot.val().username;
+      const messages = snapshot.val();
+      if (messages) {
+        Object.entries(messages).forEach(([id, msg]) => {
+          const p = document.createElement('p');
+          p.textContent = `${msg.sender}: ${msg.text}`;
+          if (msg.sender === currentUsername) {
+            p.classList.add('sent');
+            p.innerHTML += ` <span class="actions">
+              <button onclick="editMessage('${id}', '${msg.text}')">تعديل</button>
+              <button onclick="deleteMessage('${id}')">مسح</button>
+            </span>`;
+          } else {
+            p.classList.add('received');
+          }
+          chatBox.appendChild(p);
+        });
+      }
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
   });
 }
 
