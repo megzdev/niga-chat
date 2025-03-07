@@ -1,14 +1,26 @@
 // script.js
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    // ضع هنا الإعدادات بتاعتك من Firebase
-    apiKey: "xxxx",
-    authDomain: "xxxx.firebaseapp.com",
-    databaseURL: "https://xxxx-default-rtdb.firebaseio.com",
-    projectId: "xxxx",
-    storageBucket: "xxxx.appspot.com",
-    messagingSenderId: "xxxx",
-    appId: "xxxx"
-  };
+  apiKey: "AIzaSyB9rJrrfJp_5NqwSKcojFVHcaeX7nFFn6g",
+  authDomain: "niga-chat.firebaseapp.com",
+  databaseURL: "https://niga-chat-default-rtdb.firebaseio.com",
+  projectId: "niga-chat",
+  storageBucket: "niga-chat.firebasestorage.app",
+  messagingSenderId: "1057951274717",
+  appId: "1:1057951274717:web:bf326a3c320851e817ad34",
+  measurementId: "G-30WXNJ81Z3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
   
   // تهيئة Firebase
   firebase.initializeApp(firebaseConfig);
