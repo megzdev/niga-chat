@@ -60,13 +60,13 @@ function signOut() {
 
 // تبديل بين شاشة تسجيل الدخول والتسجيل
 function showSignUp() {
+  document.getElementById('signin-form').style.display = 'none';
   document.getElementById('signup-form').style.display = 'block';
-  document.getElementById('email-input').parentElement.style.display = 'none';
 }
 
 function showSignIn() {
+  document.getElementById('signin-form').style.display = 'block';
   document.getElementById('signup-form').style.display = 'none';
-  document.getElementById('email-input').parentElement.style.display = 'block';
 }
 
 // دالة إرسال الرسالة
@@ -76,7 +76,7 @@ function sendMessage() {
   if (messageText && currentUser) {
     messagesRef.push({
       text: messageText,
-      sender: currentUser.email.split('@')[0], // نستخدم جزء الإيميل قبل @ كاسم
+      sender: currentUser.email.split('@')[0],
       timestamp: Date.now()
     });
     messageInput.value = '';
