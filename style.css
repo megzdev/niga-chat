@@ -5,29 +5,88 @@
     font-family: Arial, sans-serif;
 }
 
+/* Light Mode (افتراضي) */
 body {
     background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.prompt-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.prompt-container h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.prompt-container input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.prompt-container button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .chat-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 20px;
+    transition: background-color 0.3s;
+}
+
+body.dark-mode .chat-container {
+    background-color: #2c2c2c;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 h1 {
-    text-align: center;
     color: #333;
-    margin-bottom: 20px;
     font-size: 24px;
+}
+
+body.dark-mode h1 {
+    color: #f0f0f0;
+}
+
+#theme-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 #chat-box {
@@ -40,12 +99,34 @@ h1 {
     margin-bottom: 15px;
 }
 
+body.dark-mode #chat-box {
+    background-color: #333;
+    border-color: #444;
+}
+
 #chat-box p {
-    background-color: #e9ecef;
     padding: 10px;
     border-radius: 5px;
     margin: 5px 0;
+    max-width: 70%;
     word-wrap: break-word;
+}
+
+#chat-box p.sent {
+    background-color: #007bff;
+    color: #fff;
+    margin-left: auto;
+    text-align: right;
+}
+
+#chat-box p.received {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+body.dark-mode #chat-box p.received {
+    background-color: #555;
+    color: #f0f0f0;
 }
 
 .input-area {
@@ -60,6 +141,12 @@ h1 {
     border-radius: 5px;
     font-size: 16px;
     outline: none;
+}
+
+body.dark-mode #message-input {
+    background-color: #333;
+    border-color: #444;
+    color: #f0f0f0;
 }
 
 #message-input:focus {
