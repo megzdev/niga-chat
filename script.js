@@ -95,12 +95,10 @@ function showSettings() {
   document.getElementById('chat-container').style.display = 'none';
   document.getElementById('settings-container').style.display = 'block';
   usersRef.child(currentUser.uid).once('value', (snapshot) => {
-    const userData = snapshot.val();
-    if (userData) {
-      document.getElementById('settings-username').value = userData.username || '';
-      document.getElementById('settings-email').value = userData.email || '';
-      document.getElementById('settings-avatar').value = userData.avatar || defaultAvatar;
-    }
+    const userData = snapshot.val() || {};
+    document.getElementById('settings-username').value = userData.username || '';
+    document.getElementById('settings-email').value = currentUser.email || ''; // نجيب الإيميل من currentUser
+    document.getElementById('settings-avatar').value = userData.avatar || defaultAvatar;
   });
 }
 
@@ -121,11 +119,16 @@ function updateSettings() {
   if (newAvatar) {
     usersRef.child(currentUser.uid).update({ avatar: newAvatar });
   }
-  if (newEmail) {
-    currentUser.updateEmail(newEmail).catch((error) => alert('خطأ في تحديث الإيميل: ' + error.message));
+  if (newEmail && newEmail !== currentUser.email) {
+    currentUser.updateEmail(newEmail)
+      .then(() => {
+        usersRef.child(currentUser.uid).update({ email: newEmail });
+      })
+      .catch((error) => alert('خطأ في تحديث الإيميل: ' + error.message));
   }
   if (newPassword) {
-    currentUser.updatePassword(newPassword).catch((error) => alert('خطأ في تحديث كلمة السر: ' + error.message));
+    currentUser.updatePassword(newPassword)
+      .catch((error) => alert('خطأ في تحديث كلمة السر: ' + error.message));
   }
   alert('تم تحديث الإعدادات بنجاح!');
   hideSettings();
@@ -179,7 +182,10 @@ function loadMessages() {
 
     usersRef.child(currentUser.uid).once('value', (userSnapshot) => {
       const userData = userSnapshot.val();
-      if (!userData || !userData.username) return;
+      if (!userData || !userData.username) {
+        alert('خطأ: لم يتم العثور على بيانات المستخدم!');
+        return;
+      }
       const currentUsername = userData.username;
       const messages = snapshot.val();
       if (messages) {
