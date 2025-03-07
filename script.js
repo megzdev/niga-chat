@@ -13,25 +13,25 @@ const firebaseConfig = {
 // تهيئة Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-const messagesRef = database.ref('messages'); // مكان تخزين الرسايل في قاعدة البيانات
+const messagesRef = database.ref('messages');
 
 // دالة إرسال الرسالة
 function sendMessage() {
   const messageInput = document.getElementById('message-input');
   const messageText = messageInput.value.trim();
-  if (messageText) { // نتأكد إن الحقل مش فاضي
+  if (messageText) {
     messagesRef.push({
       text: messageText,
       timestamp: Date.now()
     });
-    messageInput.value = ''; // نفرّغ الحقل بعد الإرسال
+    messageInput.value = '';
   }
 }
 
-// استقبال الرسايل وعرضها في الوقت الفعلي
+// استقبال الرسايل وعرضها
 messagesRef.on('value', (snapshot) => {
   const chatBox = document.getElementById('chat-box');
-  chatBox.innerHTML = ''; // نفرّغ الصندوق قبل التحديث
+  chatBox.innerHTML = '';
   const messages = snapshot.val();
   if (messages) {
     Object.values(messages).forEach(msg => {
@@ -39,6 +39,6 @@ messagesRef.on('value', (snapshot) => {
       p.textContent = msg.text;
       chatBox.appendChild(p);
     });
-    chatBox.scrollTop = chatBox.scrollHeight; // ننزل لآخر رسالة تلقائي
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 });
