@@ -8,11 +8,13 @@
 </head>
 <body>
     <div id="auth-container" class="prompt-container">
-        <h2>تسجيل الدخول</h2>
-        <input type="email" id="email-input" placeholder="البريد الإلكتروني">
-        <input type="password" id="password-input" placeholder="كلمة السر">
-        <button onclick="signIn()">تسجيل الدخول</button>
-        <p>مش مسجل؟ <a href="#" onclick="showSignUp()">إنشاء حساب</a></p>
+        <div id="signin-form">
+            <h2>تسجيل الدخول</h2>
+            <input type="email" id="email-input" placeholder="البريد الإلكتروني">
+            <input type="password" id="password-input" placeholder="كلمة السر">
+            <button onclick="signIn()">تسجيل الدخول</button>
+            <p>مش مسجل؟ <a href="#" onclick="showSignUp()">إنشاء حساب</a></p>
+        </div>
 
         <div id="signup-form" style="display: none;">
             <h2>إنشاء حساب</h2>
