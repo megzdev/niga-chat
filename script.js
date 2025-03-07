@@ -17,15 +17,20 @@ const messagesRef = database.ref('messages');
 
 let username = '';
 
-// دالة بدء الشات بعد إدخال الاسم
+// دالة بدء الشات مع التحقق من كود الأمان
 function startChat() {
   const usernameInput = document.getElementById('username-input');
+  const codeInput = document.getElementById('code-input');
   username = usernameInput.value.trim();
-  if (username) {
+  const code = codeInput.value;
+
+  if (username && code === '69') {
     document.getElementById('username-prompt').style.display = 'none';
     document.getElementById('chat-container').style.display = 'block';
-  } else {
+  } else if (!username) {
     alert('من فضلك، أدخل اسمك!');
+  } else {
+    alert('كود الأمان غلط! الكود الصحيح هو 69');
   }
 }
 
@@ -43,17 +48,36 @@ function sendMessage() {
   }
 }
 
-// استقبال الرسايل وعرضها
-messagesRef.on('value', (snapshot) => {
+// دالة تعديل الرسالة
+function editMessage(messageId, oldText) {
+  const newText = prompt('عدل الرسالة:', oldText);
+  if (newText && newText.trim()) {
+    messagesRef.child(messageId).update({ text: newText.trim() });
+  }
+}
+
+// دالة مسح الرسالة
+function deleteMessage(messageId) {
+  if (confirm('متأكد عاوز تمسح الرسالة؟')) {
+    messagesRef.child(messageId).remove();
+  }
+}
+
+// استقبال آخر 50 رسالة فقط
+messagesRef.limitToLast(50).on('value', (snapshot) => {
   const chatBox = document.getElementById('chat-box');
   chatBox.innerHTML = '';
   const messages = snapshot.val();
   if (messages) {
-    Object.values(messages).forEach(msg => {
+    Object.entries(messages).forEach(([id, msg]) => {
       const p = document.createElement('p');
       p.textContent = `${msg.sender}: ${msg.text}`;
       if (msg.sender === username) {
         p.classList.add('sent');
+        p.innerHTML += ` <span class="actions">
+          <button onclick="editMessage('${id}', '${msg.text}')">تعديل</button>
+          <button onclick="deleteMessage('${id}')">مسح</button>
+        </span>`;
       } else {
         p.classList.add('received');
       }
